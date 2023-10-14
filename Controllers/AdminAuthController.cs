@@ -16,44 +16,45 @@ namespace student_management.Controllers
     public class AdminAuthController : ControllerBase
     {
         private readonly IAuthRepository _authRepository;
-       public AdminAuthController(IAuthRepository authRepository)
-       {
+        public AdminAuthController(IAuthRepository authRepository)
+        {
             _authRepository = authRepository;
-        
-       } 
 
-       
+        }
 
-       [HttpPost("Login")]
-    public async Task<ActionResult<ServiceResponse<string>>> Login(UserLoginDto request){
+        [HttpPost("Login")]
+        public async Task<ActionResult<ServiceResponse<string>>> Login(UserLoginDto request)
+        {
             var response = await _authRepository.AdminLogin(request.UserName, request.Password);
-              if(!response.Success)
+            if (!response.Success)
             {
                 return BadRequest(response);
             }
             return Ok(response);
-    }
-[HttpPost("Register")]
-       public async Task<ActionResult<ServiceResponse<int>>> Register(AddAdminDto request){
+        }
+        [HttpPost("Register")]
+        public async Task<ActionResult<ServiceResponse<int>>> Register(AddAdminDto request)
+        {
             var response = await _authRepository.AdminRegister(new Admin { UserName = request.UserName, FirstName = request.FirstName, LastName = request.LastName }, request.Password);
-            if(!response.Success)
+            if (!response.Success)
             {
                 return BadRequest(response);
             }
 
-            return Ok(response); 
-       }
-[Authorize(Roles = "Admin")]
-       [HttpPost("Register/Student")]
-       public async Task<ActionResult<ServiceResponse<int>>> RegisterStudent(AddStudentDto request){
+            return Ok(response);
+        }
+        [Authorize(Roles = "Admin")]
+        [HttpPost("Register/Student")]
+        public async Task<ActionResult<ServiceResponse<int>>> RegisterStudent(AddStudentDto request)
+        {
             var response = await _authRepository.StudentRegister(request);
-            if(!response.Success)
+            if (!response.Success)
             {
                 return BadRequest(response);
             }
 
-            return Ok(response); 
-       }
-       
+            return Ok(response);
+        }
+
     }
 }
